@@ -5,6 +5,8 @@ import kotlin.concurrent.thread
 
 /**
  * 示例5：传统多线程下的异步协作
+ *
+ * p.s. 运行耗时3s
  * @author chendk on 2021/8/9
  */
 fun main() {

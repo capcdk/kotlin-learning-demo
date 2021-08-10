@@ -7,6 +7,8 @@ import kotlin.random.Random
 
 /**
  * 示例4：同步协作
+ *
+ * p.s. 每个依赖的外部接口模拟耗时为1s，总耗时为4s。
  * @author chendk on 2021/8/9
  */
 fun main() {
