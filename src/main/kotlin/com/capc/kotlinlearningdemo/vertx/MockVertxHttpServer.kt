@@ -4,6 +4,7 @@ import io.vertx.core.http.HttpHeaders
 import io.vertx.core.http.HttpMethod
 import io.vertx.core.http.HttpServerOptions
 import io.vertx.ext.web.Router
+import io.vertx.ext.web.RoutingContext
 import org.springframework.util.MimeTypeUtils.TEXT_PLAIN_VALUE
 
 /**
@@ -34,21 +35,21 @@ fun main() {
 fun generateHttpRouter(): Router {
     val router = Router.router(vertx)
 
-    router.route(HttpMethod.GET, "/mock/:cost").apply {
-        this.handler { context ->
-            val cost = context.request().getParam("cost").toLongOrNull()
-            println("mock接收参数cost = $cost")
-            val doResponse = {
-                val res = (cost ?: 0) + 1
-                context.response().putHeader(HttpHeaders.CONTENT_TYPE, TEXT_PLAIN_VALUE).end(res.toString())
-            }
-            if (cost != null) {
-                vertx.setTimer(cost) {
-                    doResponse()
-                }
-            } else doResponse()
-        }
-    }
+    router.route(HttpMethod.GET, "/mock/:cost").handler(mockCost)
 
     return router
+}
+
+val mockCost: (RoutingContext) -> Unit = { context ->
+    val cost = context.request().getParam("cost").toLongOrNull()
+    println("mock接收参数cost = $cost")
+    val doResponse = {
+        val res = (cost ?: 0) + 1
+        context.response().putHeader(HttpHeaders.CONTENT_TYPE, TEXT_PLAIN_VALUE).end(res.toString())
+    }
+    if (cost != null) {
+        vertx.setTimer(cost) {
+            doResponse()
+        }
+    } else doResponse()
 }
