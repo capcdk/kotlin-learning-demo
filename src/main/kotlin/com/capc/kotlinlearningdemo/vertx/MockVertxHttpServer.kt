@@ -12,11 +12,15 @@ import org.springframework.util.MimeTypeUtils.TEXT_PLAIN_VALUE
  */
 val mockHttpHost = "127.0.0.1"
 val mockHttpPort = 8080
+val getMockPath: (Long) -> String = { "http://$mockHttpHost:$mockHttpPort/mock/$it" }
 
 fun main() {
-    val router = generateHttpRouter()
+    startHttpServer()
+}
 
-    vertx.createHttpServer(
+fun startHttpServer() {
+    val router = generateHttpRouter()
+    serverVertx.createHttpServer(
         HttpServerOptions()
             .setTcpFastOpen(true)
             .setTcpNoDelay(true)
@@ -33,7 +37,7 @@ fun main() {
 }
 
 fun generateHttpRouter(): Router {
-    val router = Router.router(vertx)
+    val router = Router.router(serverVertx)
 
     router.route(HttpMethod.GET, "/mock/:cost").handler(mockCost)
 
@@ -42,13 +46,13 @@ fun generateHttpRouter(): Router {
 
 val mockCost: (RoutingContext) -> Unit = { context ->
     val cost = context.request().getParam("cost").toLongOrNull()
-    println("mock接收参数cost = $cost")
+//    println("mock接收参数cost = $cost")
     val doResponse = {
         val res = (cost ?: 0) + 1
         context.response().putHeader(HttpHeaders.CONTENT_TYPE, TEXT_PLAIN_VALUE).end(res.toString())
     }
     if (cost != null) {
-        vertx.setTimer(cost) {
+        serverVertx.setTimer(cost) {
             doResponse()
         }
     } else doResponse()

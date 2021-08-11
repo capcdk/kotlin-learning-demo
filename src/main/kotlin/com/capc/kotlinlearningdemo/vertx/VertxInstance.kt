@@ -9,7 +9,14 @@ import io.vertx.ext.web.client.WebClientOptions
 /**
  * 全局唯一vertx实例
  */
-val vertx = Vertx.vertx(
+val serverVertx = Vertx.vertx(
+    VertxOptions()
+        .setEventLoopPoolSize(Runtime.getRuntime().availableProcessors())
+        .setPreferNativeTransport(true)
+        .setInternalBlockingPoolSize(Runtime.getRuntime().availableProcessors() * 8)
+)
+
+val clientVertx = Vertx.vertx(
     VertxOptions()
         .setEventLoopPoolSize(Runtime.getRuntime().availableProcessors())
         .setPreferNativeTransport(true)
@@ -18,8 +25,8 @@ val vertx = Vertx.vertx(
 
 // Https支持
 val webClient = WebClient.create(
-    vertx, WebClientOptions()
+    clientVertx, WebClientOptions()
         .setTrustAll(true)
         .setVerifyHost(false)
-        .setMaxPoolSize(500)
+        .setMaxPoolSize(1000)
 )
