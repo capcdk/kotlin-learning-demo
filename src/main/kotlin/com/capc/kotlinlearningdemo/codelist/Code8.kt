@@ -11,7 +11,7 @@ import java.math.BigDecimal
 import kotlin.random.Random
 
 /**
- * 示例8：响应式+compose链式调用改造后的批量查询
+ * 示例8：响应式框架封装优化后的批量查询
  *
  * p.s. 耗时 4.6s
  * @author chendk on 2021/8/9
