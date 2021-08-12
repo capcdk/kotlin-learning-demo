@@ -17,6 +17,7 @@ fun main() {
     val notNullFund3 = mockNullableFund() ?: throw RuntimeException("fund is null")
     val notNullFund4 = mockNullableFund() ?: return
 
+
     /*
     * 空安全语法糖2：as?
     * as为强转关键字，同java里的(Fund) obj形式。而as?的意思为，类型不符无法强转时，引用会被赋值为null，而不是抛异常
@@ -28,16 +29,21 @@ fun main() {
     val fund2 = number as? Fund
     val fund3 = null as? Fund
 
+
     /*
     * 空安全语法糖3：?.
     * 在kotlin中当我们想调用可空对象的方法时，要么我们传统的提前判空，要么也可以通过?.来做便捷的非空时调用
     * */
     val someNullableFund = mockNullableFund()
     // 传统的判空后调用
-    if (someNullableFund != null) {
-        val scaleTotal1 = someNullableFund.scaleTotal
-        println(scaleTotal1)
+    val scaleTotal1: BigDecimal
+    if (someNullableFund != null && someNullableFund.scaleTotal != null) {
+        scaleTotal1 = someNullableFund.scaleTotal!!
+    } else {
+        scaleTotal1 = BigDecimal.ZERO
     }
+    println(scaleTotal1)
+
     // kotlin式的非空时调用语法糖
     val scaleTotal2 = someNullableFund?.scaleTotal ?: BigDecimal.ZERO
     println(scaleTotal2)
