@@ -11,7 +11,7 @@ import io.vertx.ext.web.client.WebClientOptions
  */
 val serverVertx = Vertx.vertx(
     VertxOptions()
-        .setEventLoopPoolSize(Runtime.getRuntime().availableProcessors())
+        .setEventLoopPoolSize(mockInstance * 2)
         .setPreferNativeTransport(true)
         .setInternalBlockingPoolSize(Runtime.getRuntime().availableProcessors() * 8)
 )
