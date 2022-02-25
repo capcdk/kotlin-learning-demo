@@ -27,7 +27,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "2"
+          cpus: '2'
           memory: 1G
     networks:
       - devnet
@@ -44,7 +44,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "1"
+          cpus: '1'
           memory: 1G
     networks:
       - devnet

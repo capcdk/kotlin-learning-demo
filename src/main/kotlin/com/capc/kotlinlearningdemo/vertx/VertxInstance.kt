@@ -31,17 +31,16 @@ val clientVertx: Vertx by lazy {
 
 // Https支持
 val webClient: WebClient by lazy {
-    WebClient.create(
-        clientVertx, WebClientOptions().apply {
-            isTrustAll = true
-            isVerifyHost = false
-            isTcpFastOpen = true
-            isTcpQuickAck = true
-            isTcpNoDelay = true
-            maxPoolSize = 1000
+    val options = WebClientOptions().apply {
+        isTrustAll = true
+        isVerifyHost = false
+        isTcpFastOpen = true
+        isTcpQuickAck = true
+        isTcpNoDelay = true
+        maxPoolSize = 1000
 //        if (httpKeepAliveSec > 0) {
 //            options.setTcpKeepAlive(true).keepAliveTimeout = httpKeepAliveSec
 //        }
-        }
-    )
+    }
+    WebClient.create(clientVertx, options)
 }
