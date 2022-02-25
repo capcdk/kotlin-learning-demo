@@ -18,7 +18,7 @@
         <kotlin.version>1.5.21</kotlin.version>
         <kotlin-coroutine.version>1.5.1</kotlin-coroutine.version>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
-        <netty.version>4.1.66.Final</netty.version>
+<!--        <netty.version>4.1.66.Final</netty.version>-->
         <vertx.version>4.1.2</vertx.version>
         <mock-server.main.class>com.capc.kotlinlearningdemo.vertx.server.mock.MockVertxHttpServerKt</mock-server.main.class>
         <pressure-server.main.class>com.capc.kotlinlearningdemo.vertx.server.pressure.VertxPressureServerKt</pressure-server.main.class>
