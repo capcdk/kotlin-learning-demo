@@ -1,8 +1,8 @@
 package com.capc.kotlinlearningdemo.codelist
 
 import com.capc.kotlinlearningdemo.common.*
-import com.capc.kotlinlearningdemo.vertx.getMockPath
-import com.capc.kotlinlearningdemo.vertx.startHttpServer
+import com.capc.kotlinlearningdemo.vertx.server.mock.getMockPath
+import com.capc.kotlinlearningdemo.vertx.server.mock.startHttpServer
 import com.capc.kotlinlearningdemo.vertx.webClient
 import io.vertx.core.CompositeFuture
 import io.vertx.core.Future

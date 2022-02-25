@@ -1,7 +1,7 @@
 package com.capc.kotlinlearningdemo.codelist
 
 import com.capc.kotlinlearningdemo.common.PoDetailInfo
-import com.capc.kotlinlearningdemo.vertx.startHttpServer
+import com.capc.kotlinlearningdemo.vertx.server.mock.startHttpServer
 import io.vertx.kotlin.coroutines.await
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope

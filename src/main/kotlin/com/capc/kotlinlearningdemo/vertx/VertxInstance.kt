@@ -6,27 +6,42 @@ import io.vertx.ext.web.client.WebClient
 import io.vertx.ext.web.client.WebClientOptions
 
 
+val instance = System.getenv("INSTANCES")?.toIntOrNull() ?: Runtime.getRuntime().availableProcessors()
+
 /**
  * 全局唯一vertx实例
  */
-val serverVertx = Vertx.vertx(
-    VertxOptions()
-        .setEventLoopPoolSize(mockInstance * 2)
-        .setPreferNativeTransport(true)
-        .setInternalBlockingPoolSize(Runtime.getRuntime().availableProcessors() * 8)
-)
+val serverVertx: Vertx by lazy {
+    Vertx.vertx(
+        VertxOptions()
+            .setEventLoopPoolSize(instance * 2)
+            .setPreferNativeTransport(true)
+            .setInternalBlockingPoolSize(instance * 8)
+    )
+}
 
-val clientVertx = Vertx.vertx(
-    VertxOptions()
-        .setEventLoopPoolSize(Runtime.getRuntime().availableProcessors())
-        .setPreferNativeTransport(true)
-        .setInternalBlockingPoolSize(Runtime.getRuntime().availableProcessors() * 8)
-)
+val clientVertx: Vertx by lazy {
+    Vertx.vertx(
+        VertxOptions()
+            .setEventLoopPoolSize(instance * 2)
+            .setPreferNativeTransport(true)
+            .setInternalBlockingPoolSize(instance * 8)
+    )
+}
 
 // Https支持
-val webClient = WebClient.create(
-    clientVertx, WebClientOptions()
-        .setTrustAll(true)
-        .setVerifyHost(false)
-        .setMaxPoolSize(1000)
-)
+val webClient: WebClient by lazy {
+    WebClient.create(
+        clientVertx, WebClientOptions().apply {
+            isTrustAll = true
+            isVerifyHost = false
+            isTcpFastOpen = true
+            isTcpQuickAck = true
+            isTcpNoDelay = true
+            maxPoolSize = 1000
+//        if (httpKeepAliveSec > 0) {
+//            options.setTcpKeepAlive(true).keepAliveTimeout = httpKeepAliveSec
+//        }
+        }
+    )
+}

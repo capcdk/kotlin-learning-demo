@@ -20,7 +20,8 @@
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <netty.version>4.1.66.Final</netty.version>
         <vertx.version>4.1.2</vertx.version>
-        <main.class>com.capc.kotlinlearningdemo.vertx.MockVertxHttpServerKt</main.class>
+        <mock-server.main.class>com.capc.kotlinlearningdemo.vertx.server.mock.MockVertxHttpServerKt</mock-server.main.class>
+        <pressure-server.main.class>com.capc.kotlinlearningdemo.vertx.server.pressure.VertxPressureServerKt</pressure-server.main.class>
     </properties>
 
     <dependencies>
@@ -46,7 +47,7 @@
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlinx</groupId>
-            <artifactId>kotlinx-coroutines-core</artifactId>
+            <artifactId>kotlinx-coroutines-core-jvm</artifactId>
             <version>${kotlin-coroutine.version}</version>
         </dependency>
 
@@ -84,6 +85,11 @@
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-lang-kotlin-coroutines</artifactId>
+            <version>${vertx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-redis-client</artifactId>
             <version>${vertx.version}</version>
         </dependency>
 
@@ -240,13 +246,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.6</version>
+                <version>3.3.0</version>
                 <configuration>
                     <finalName>app</finalName>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>make-assembly</id>
+                        <id>make-assembly1</id>
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
@@ -254,12 +260,35 @@
                         <configuration>
                             <archive>
                                 <manifest>
-                                    <mainClass>${main.class}</mainClass>
+                                    <mainClass>${mock-server.main.class}</mainClass>
                                 </manifest>
                             </archive>
-                            <descriptorRefs>
-                                <descriptorRef>jar-with-dependencies</descriptorRef>
-                            </descriptorRefs>
+                            <descriptors>
+                                <descriptor>src/assembly/mock-server.xml</descriptor>
+                            </descriptors>
+                            <!--                            <descriptorRefs>-->
+                            <!--                                <descriptorRef>jar-with-dependencies</descriptorRef>-->
+                            <!--                            </descriptorRefs>-->
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>make-assembly2</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <mainClass>${pressure-server.main.class}</mainClass>
+                                </manifest>
+                            </archive>
+                            <descriptors>
+                                <descriptor>src/assembly/pressure-server.xml</descriptor>
+                            </descriptors>
+                            <!--                            <descriptorRefs>-->
+                            <!--                                <descriptorRef>jar-with-dependencies</descriptorRef>-->
+                            <!--                            </descriptorRefs>-->
                         </configuration>
                     </execution>
                 </executions>

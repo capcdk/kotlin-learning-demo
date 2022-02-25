@@ -1,16 +1,29 @@
 version: "3"
 services:
+  #  local-redis:
+  #    image: redis:6.0.8
+  #    command: redis-server --requirepass 123456
+  #    ports:
+  #      - "6379:6379"
+  #    deploy:
+  #      resources:
+  #        limits:
+  #          cpus: "1"
+  #          memory: 1G
+  #    networks:
+  #      - devnet
   mock-server:
     image: mock-server:latest
     ports:
       - "9011:9011"
     environment:
-      JVM_OPTS: -server -Xms512m -Xmx512m
+      JVM_OPTS: -server -Xms768m -Xmx768m
       MOCK_PORT: 9011
       INSTANCES: 2
-#    links:
-#      - local-mongo
-#      - local-redis
+      #      REDIS_HOST: local-redis
+      #    links:
+      #      - local-mongo
+      #      - local-redis
     deploy:
       resources:
         limits:
@@ -18,6 +31,25 @@ services:
           memory: 1G
     networks:
       - devnet
+  pressure-server:
+    image: pressure-server:latest
+    ports:
+      - "9012:9012"
+    environment:
+      JVM_OPTS: -server -Xms768m -Xmx768m
+      SERVER_PORT: 9012
+      INSTANCES: 1
+    links:
+      - mock-server
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1G
+    networks:
+      - devnet
+    depends_on:
+      - mock-server
 networks:
   devnet:
     driver: bridge
