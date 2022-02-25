@@ -1,4 +1,4 @@
-version: "3"
+version: "2.4"
 services:
   #  local-redis:
   #    image: redis:6.0.8
@@ -24,11 +24,8 @@ services:
       #    links:
       #      - local-mongo
       #      - local-redis
-    deploy:
-      resources:
-        limits:
-          cpus: '2'
-          memory: 1G
+    mem_limit: 1G
+    cpus: 2
     networks:
       - devnet
   pressure-server:
@@ -41,11 +38,8 @@ services:
       INSTANCES: 1
     links:
       - mock-server
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 1G
+    mem_limit: 1G
+    cpus: 1
     networks:
       - devnet
     depends_on:
