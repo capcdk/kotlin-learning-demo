@@ -1,4 +1,4 @@
-version: "2.4"
+version: "3.8"
 services:
   #  local-redis:
   #    image: redis:6.0.8
@@ -19,31 +19,29 @@ services:
     environment:
       JVM_OPTS: -server -Xms768m -Xmx768m
       MOCK_PORT: 9011
+      MOCK_COST_MILLIS: 20
       INSTANCES: 2
       #      REDIS_HOST: local-redis
       #    links:
       #      - local-mongo
       #      - local-redis
-    mem_limit: 1G
-    cpus: 2
-    networks:
-      - devnet
-  pressure-server:
-    image: pressure-server:latest
-    ports:
-      - "9012:9012"
-    environment:
-      JVM_OPTS: -server -Xms768m -Xmx768m
-      SERVER_PORT: 9012
-      INSTANCES: 1
-    links:
-      - mock-server
-    mem_limit: 1G
-    cpus: 1
-    networks:
-      - devnet
-    depends_on:
-      - mock-server
-networks:
-  devnet:
-    driver: bridge
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 1G
+#  pressure-server:
+#    image: pressure-server:latest
+#    ports:
+#      - "9012:9012"
+#    environment:
+#      JVM_OPTS: -server -Xms768m -Xmx768m
+#      SERVER_PORT: 9012
+#      INSTANCES: 1
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: '1'
+#          memory: 1G
+#    depends_on:
+#      - mock-server

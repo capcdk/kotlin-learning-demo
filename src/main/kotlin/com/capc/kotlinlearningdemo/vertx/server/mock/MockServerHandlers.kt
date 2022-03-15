@@ -37,3 +37,21 @@ val redisGet: suspend (RoutingContext) -> Unit = { context ->
     val response = redisApi.get(key).await()
     context.response().putHeader(HttpHeaders.CONTENT_TYPE, MimeTypeUtils.TEXT_PLAIN_VALUE).end(response.toString())
 }
+
+val mockCostMillis = System.getenv("MOCK_COST_MILLIS")?.toLongOrNull()
+fun getMockData(ctx: RoutingContext, mockDataKey: String, mockContentType: String) {
+    if (mockCostMillis == null) {
+        responseMockData(ctx, mockDataKey, mockContentType)
+    } else {
+        ctx.vertx().setTimer(mockCostMillis) {
+            responseMockData(ctx, mockDataKey, mockContentType)
+        }
+    }
+}
+
+private fun responseMockData(ctx: RoutingContext, mockDataKey: String, mockContentType: String) {
+    val mockData = mockDataMap[mockDataKey] ?: ""
+    ctx.response()
+        .putHeader(HttpHeaders.CONTENT_TYPE, mockContentType)
+        .end(mockData)
+}
